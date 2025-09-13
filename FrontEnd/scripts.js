@@ -129,6 +129,14 @@ async function handleSend() {
     const reply = backendAvailable ? await callBackend(history) : demoReply(text);
     addBubble(reply, 'bot');
     history.push({ role:'model', text: reply });
+
+    // ====== TRIGGER para abrir chamado ======
+    if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
+      const chamado = await abrirChamado(text); // função que você define
+      addBubble(`✅ Chamado aberto com ID ${chamado.id}`, 'bot');
+    }
+    // ========================================
+
   } catch (err) {
     console.error(err);
     addBubble('Ops! Não consegui responder agora. ' + String(err), 'bot');
@@ -137,6 +145,7 @@ async function handleSend() {
     $typing.style.display = 'none';
   }
 }
+
 
 document.getElementById('sendBtn').addEventListener('click', handleSend);
 document.getElementById('chatInput').addEventListener('keydown', (e)=>{
