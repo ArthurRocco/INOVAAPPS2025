@@ -4,6 +4,21 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('./suporte.db', (err) => {
+  if (err) console.error('Erro ao conectar no banco:', err.message);
+  else console.log('Conectado ao banco suporte.db');
+});
+
+// Cria tabela se não existir
+db.run(`CREATE TABLE IF NOT EXISTS chamados (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo TEXT NOT NULL,
+    departamento TEXT,
+    descricao TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'aberto'
+);`);
 
 dotenv.config();
 
@@ -55,6 +70,49 @@ app.post('/api/gemini-chat', async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: String(e) });
   }
+});
+// Abrir um chamado
+app.post('/api/chamados', (req, res) => {
+  const { titulo, departamento, descricao } = req.body;
+  if (!titulo || !descricao) {
+    return res.status(400).json({ error: 'Título e descrição são obrigatórios' });
+  }
+
+  db.run(
+    `INSERT INTO chamados (titulo, departamento, descricao, status) VALUES (?, ?, ?, ?)`,
+    [titulo, departamento || null, descricao, 'aberto'],
+    function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ id: this.lastID, titulo, departamento, descricao, status: 'aberto' });
+    }
+  );
+});
+
+
+// Listar chamados
+app.get('/api/chamados', (req, res) => {
+  db.all('SELECT * FROM chamados ORDER BY id DESC', [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
+
+// Atualizar status de um chamado
+app.put('/api/chamados/:id', (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  if (!status) return res.status(400).json({ error: 'Status obrigatório' });
+
+  db.run(
+    'UPDATE chamados SET status = ? WHERE id = ?',
+    [status, id],
+    function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) return res.status(404).json({ error: 'Chamado não encontrado' });
+      res.json({ id, status });
+    }
+  );
 });
 
 // Sirva o frontend estático (opcional: prod/dev juntos)
