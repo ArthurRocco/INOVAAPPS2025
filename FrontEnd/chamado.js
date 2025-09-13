@@ -31,6 +31,39 @@ function render(){
         </div>
       </div>`;
     grid.appendChild(col);
+    // Efeito de peso ao passar o mouse (mais visível e suave)
+    const card = col.querySelector('.card');
+    card.style.transition = 'transform 120ms ease, box-shadow 120ms ease';
+    card.style.transformStyle = 'preserve-3d';
+    card.style.willChange = 'transform';
+
+    let ticking = false;
+    let lastX = 0, lastY = 0;
+
+    card.addEventListener('mousemove', (e) => {
+      lastX = e.clientX; lastY = e.clientY;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = lastX - rect.left;
+          const y = lastY - rect.top;
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          const maxDeg = 9; // mais visível
+          const rotateX = ((y - cy) / cy) * maxDeg;    // inclina para cima/baixo
+          const rotateY = ((x - cx) / cx) * -maxDeg;   // inclina para os lados
+          card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+          card.style.boxShadow = '0 14px 28px rgba(0,0,0,0.12)';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
+      card.style.boxShadow = '';
+    });
   }
 
   // Ações
