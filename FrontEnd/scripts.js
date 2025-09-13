@@ -78,14 +78,15 @@ probeBackend();
 
 // ===== Chamada ao backend =====
 
-let systemInstruction = '';
+let systemInstruction = "Você é um assistente de suporte técnico em PT-BR. Responda apenas aos seguintes tópicos de forma curta:";
 
 async function loadSystemInstruction() {
   try {
     const res = await fetch('Suport/teste.txt');
     if (!res.ok) throw new Error('Não foi possível carregar o arquivo systemInstruction.txt');
-    systemInstruction = await res.text();
+    systemInstruction += await res.text();
     console.log('systemInstruction carregado com sucesso');
+    systemInstruction += " Se o usuário perguntar algo **fora desses tópicos** ou quiser ABRIR UM CHAMADO, responda: Não tenho uma solução pronta, mas vou criar um chamado para suporte técnico."
   } catch (err) {
     console.error(err);
     systemInstruction = 'Erro: não foi possível carregar instruções.';
