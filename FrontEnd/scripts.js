@@ -77,23 +77,44 @@ async function probeBackend(){
 probeBackend();
 
 // ===== Chamada ao backend =====
+
+let systemInstruction = '';
+
+async function loadSystemInstruction() {
+  try {
+    const res = await fetch('Suport/teste.txt');
+    if (!res.ok) throw new Error('Não foi possível carregar o arquivo systemInstruction.txt');
+    systemInstruction = await res.text();
+    console.log('systemInstruction carregado com sucesso');
+  } catch (err) {
+    console.error(err);
+    systemInstruction = 'Erro: não foi possível carregar instruções.';
+  }
+}
+
+// Chame essa função no início do seu script
+loadSystemInstruction();
+
+// Função que envia as mensagens para o backend
 async function callBackend(messages){
   const contents = [
-    { role: "user", parts: [{ text: "Você é um assistente em PT-BR. Responda naturalmente e objetivamente." }] },
+    { role: "user", parts: [{ text: systemInstruction }] },
     ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] }))
   ];
+
   const res = await fetch(CFG.endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: CFG.model, contents })
   });
+
   if (!res.ok) throw new Error('Proxy falhou: ' + res.status);
-  const data = await res.json(); // { text }
+  const data = await res.json(); 
   return data.text || '(sem resposta)';
 }
 
 // ===== Envio =====
-async function handleSend(){
+async function handleSend() {
   const text = $input.value.trim();
   if (!text) return;
 
@@ -103,6 +124,7 @@ async function handleSend(){
 
   $typing.style.display = 'block';
   try {
+    if (!systemInstruction) await loadSystemInstruction(); // garante carregamento
     const reply = backendAvailable ? await callBackend(history) : demoReply(text);
     addBubble(reply, 'bot');
     history.push({ role:'model', text: reply });
