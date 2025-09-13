@@ -1,0 +1,37 @@
+
+
+
+/* ====== Estilos específicos da página de Chamados ====== */
+
+body.app {
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  box-shadow: var(--shadow);
+}
+
+#ticketsGrid .card {
+  border: none;
+  border-radius: var(--radius);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#ticketsGrid .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+#ticketsGrid .card-body strong {
+  font-size: 1rem;
+}
+
+#ticketsGrid p {
+  font-size: .9rem;
+  color: var(--text);
+}
+
+#ticketsEmpty {
+  font-style: italic;
+}
