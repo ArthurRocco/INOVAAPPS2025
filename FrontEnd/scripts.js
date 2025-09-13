@@ -131,10 +131,15 @@ async function handleSend() {
     history.push({ role:'model', text: reply });
 
     // ====== TRIGGER para abrir chamado ======
-    if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
-      const chamado = await abrirChamado(text); // função que você define
-      addBubble(`✅ Chamado aberto com ID ${chamado.id}`, 'bot');
-    }
+    // Uso:
+  if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
+    const chamado = await abrirChamado({
+      titulo: "Erro relatado pelo usuário",
+      departamento: "",
+      descricao: text
+    });
+    addBubble(`✅ Chamado aberto com ID ${chamado.id}`, 'bot');
+  }
     // ========================================
 
   } catch (err) {
@@ -145,6 +150,18 @@ async function handleSend() {
     $typing.style.display = 'none';
   }
 }
+
+async function abrirChamado({ titulo, departamento, descricao }) {
+  const res = await fetch('/api/chamados', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ titulo, departamento, descricao })
+  });
+  if (!res.ok) throw new Error('Falha ao abrir chamado');
+  return await res.json();
+}
+
+
 
 
 document.getElementById('sendBtn').addEventListener('click', handleSend);
