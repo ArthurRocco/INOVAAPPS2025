@@ -19,6 +19,7 @@
       <div class="d-flex align-items-center me-2 gap-2">
         <a href="./chamados.html" class="btn btn-sm btn-outline-light">Chamados</a>
         <button class="btn btn-sm btn-outline-light" id="userBtn" data-bs-toggle="modal" data-bs-target="#userModal">Usuário</button>
+        <button class="btn btn-sm btn-outline-light" id="newTicketBtn" data-bs-toggle="modal" data-bs-target="#newTicketModal">Novo Chamado</button>
         <span class="badge bg-light text-dark" id="modeBadge">Demo</span>
       </div>
     </div>
@@ -160,6 +161,80 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" id="saveUser" class="btn btn-brand">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Novo Chamado (manual) -->
+  <div class="modal fade" id="newTicketModal" tabindex="-1" aria-labelledby="newTicketLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="newTicketLabel" class="modal-title">Novo Chamado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="ticketTitle" class="form-label">Título</label>
+            <input type="text" id="ticketTitle" class="form-control" placeholder="Ex.: Erro ao fazer login" />
+          </div>
+          <div class="mb-3">
+            <label for="ticketDescription" class="form-label">Descrição</label>
+            <textarea id="ticketDescription" class="form-control" rows="4" placeholder="Descreva o problema com detalhes…"></textarea>
+          </div>
+
+          <div class="mb-2">Departamento (marque um ou mais):</div>
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="TI" id="deptTI">
+                <label class="form-check-label" for="deptTI">TI</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Recursos Humanos" id="deptRH">
+                <label class="form-check-label" for="deptRH">Recursos Humanos</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Financeiro" id="deptFin">
+                <label class="form-check-label" for="deptFin">Financeiro</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Comercial" id="deptCom">
+                <label class="form-check-label" for="deptCom">Comercial</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Marketing" id="deptMkt">
+                <label class="form-check-label" for="deptMkt">Marketing</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Operações" id="deptOps">
+                <label class="form-check-label" for="deptOps">Operações</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Outro" id="deptOut">
+                <label class="form-check-label" for="deptOut">Outro</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-text mt-2">Você poderá vincular esse chamado ao perfil do usuário depois.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" id="createTicket" class="btn btn-brand">Criar chamado</button>
         </div>
       </div>
     </div>
