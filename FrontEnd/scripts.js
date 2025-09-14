@@ -134,7 +134,7 @@ async function handleSend() {
     // Uso:
   if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
     const chamado = await abrirChamado({
-      titulo: "Erro relatado pelo usuário",
+      titulo: "Chamado criado por: Usuário ",
       departamento: "",
       descricao: text
     });

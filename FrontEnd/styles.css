@@ -1,8 +1,11 @@
 /* ====== Base (inspirado no visual clean da Apple) ====== */
 :root {
   /* Paleta */
-  --brand: rgb(144, 25, 235);
-  --bot: rgb(240, 178, 111);         /* bolha do bot (laranja) */
+  --brand-primary: #3b276b;   /* roxo */
+  --brand-accent: #e6521d;    /* laranja */
+
+  --brand: var(--brand-primary);
+  --bot: var(--brand-accent);         /* bolha do bot (laranja) */
   --user: rgb(202, 204, 237);        /* bolha do usuário */
 
   --bg: rgb(248, 249, 251);          /* fundo app */
@@ -37,7 +40,7 @@ body {
 
 /* Header minimalista com gradiente sutil */
 .brand-gradient {
-  background: linear-gradient(135deg, var(--brand), rgb(138, 92, 243));
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
   border: 0;
 }
 
@@ -103,9 +106,9 @@ body {
 }
 
 textarea#chatInput { resize: none; }
-textarea#chatInput:focus { box-shadow: none; border-color: var(--brand); }
+textarea#chatInput:focus { box-shadow: none; border-color: var(--brand-accent); }
 
-.btn-brand { background: var(--brand); color: #fff; border: none; }
+.btn-brand { background: var(--brand-accent); color: #fff; border: none; }
 .btn-brand:hover { filter: brightness(0.95); color:#fff; }
 .btn-brand:focus { box-shadow: 0 0 0 0.25rem rgba(111,66,193,.25); }
 

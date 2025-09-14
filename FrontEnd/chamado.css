@@ -1,6 +1,3 @@
-
-
-
 /* ====== Estilos específicos da página de Chamados ====== */
 
 body.app {
@@ -10,6 +7,24 @@ body.app {
 
 header {
   box-shadow: var(--shadow);
+}
+
+/* Navbar custom colors (fix: target plain <header>) */
+header {
+  background-color: #3b276b !important; /* roxo */
+}
+header a, header .navbar-brand, header .nav-link, header .navbar-text, header h1, header .btn-link {
+  color: #fff !important;
+}
+header .btn-outline-light {
+  color: #e6521d !important;       /* laranja */
+  border-color: #e6521d !important;
+}
+header .btn-outline-light:hover,
+header .btn-outline-light:focus {
+  background-color: #e6521d !important;
+  color: #fff !important;
+  border-color: #e6521d !important;
 }
 
 #ticketsGrid .card {
@@ -35,3 +50,35 @@ header {
 #ticketsEmpty {
   font-style: italic;
 }
+
+/* Status badge + animação */
+.status-badge { text-transform: none; font-weight: 600; transition: transform .15s ease, background .15s ease, color .15s ease; }
+.status-badge.aberto { background: rgb(52,199,89); color: #fff; }
+.status-badge.em-analise { background: rgb(255,159,10); color: #fff; }
+.status-badge.resolvido { background: rgb(10,132,255); color: #fff; }
+.status-badge.fechado { background: rgb(99,99,102); color: #fff; }
+@keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.12); } 100% { transform: scale(1); } }
+.status-badge.bump { animation: bump .25s ease; }
+
+/* Filtros (departamentos) */
+.filters-bar {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: .5rem;
+  border: 1px solid var(--divider);
+  box-shadow: var(--shadow);
+}
+.filters-wrap { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.filter-pill {
+  border: 1px solid var(--divider);
+  background: #fff;
+  border-radius: 999px;
+  padding: .4rem .9rem;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.filter-pill:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
+.filter-pill.active { background: rgb(10,132,255); color: #fff; border-color: rgba(10,132,255,.2); }
+@media (max-width: 576px){ .filter-pill{ font-size: .85rem; padding: .35rem .8rem; } }
