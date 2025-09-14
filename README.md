@@ -77,3 +77,7 @@ Você deverá ver a interface de chat pronta para uso.
 ---
 
 Obrigado por usar o ChatBot do grupo WebWizards! Se você encontrar algum problema, por favor abra uma issue no repositório.
+
+git checkout main
+git fetch origin
+git merge origin/main
