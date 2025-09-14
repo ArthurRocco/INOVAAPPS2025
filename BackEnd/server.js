@@ -84,22 +84,25 @@ app.post('/api/gemini-chat', async (req, res) => {
     res.status(500).json({ error: String(e) });
   }
 });
+
 // Abrir um chamado
 app.post('/api/chamados', (req, res) => {
-  const { titulo, departamento, descricao } = req.body;
-  if (!titulo || !descricao) {
-    return res.status(400).json({ error: 'Título e descrição são obrigatórios' });
+  const { titulo, departamento_id, descricao } = req.body;
+  if (!titulo || !descricao || !departamento_id) {
+    return res.status(400).json({ error: 'Título, departamento e descrição são obrigatórios' });
   }
 
   db.run(
-    `INSERT INTO chamados (titulo, departamento, descricao, status) VALUES (?, ?, ?, ?)`,
-    [titulo, departamento || null, descricao, 'aberto'],
+    `INSERT INTO chamados (titulo, departamento_id, descricao, status) VALUES (?, ?, ?, ?)`,
+    [titulo, departamento_id, descricao, 'aberto'],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID, titulo, departamento, descricao, status: 'aberto' });
+      res.json({ id: this.lastID, titulo, departamento_id, descricao, status: 'aberto' });
     }
   );
 });
+
+
 
 
 // Listar chamados
@@ -126,6 +129,14 @@ app.put('/api/chamados/:id', (req, res) => {
       res.json({ id, status });
     }
   );
+});
+
+// Listar departamentos
+app.get('/api/departamentos', (req, res) => {
+  db.all('SELECT * FROM departamentos ORDER BY nome', [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
 });
 
 // Sirva o frontend estático (opcional: prod/dev juntos)
