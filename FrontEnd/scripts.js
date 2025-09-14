@@ -134,7 +134,7 @@ async function handleSend() {
     // Uso:
   if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
     const chamado = await abrirChamado({
-      titulo: "Chamado criado por: Usuário ",
+      titulo: "Chamado criado automaticamente",
       departamento_id: 1,
       descricao: text
     });
