@@ -135,7 +135,7 @@ async function handleSend() {
   if (/abrir um chamado|vou criar um chamado/i.test(reply)) {
     const chamado = await abrirChamado({
       titulo: "Chamado criado por: Usuário ",
-      departamento: "",
+      departamento_id: 1,
       descricao: text
     });
     addBubble(`✅ Chamado aberto com ID ${chamado.id}`, 'bot');
@@ -151,11 +151,11 @@ async function handleSend() {
   }
 }
 
-async function abrirChamado({ titulo, departamento, descricao }) {
+async function abrirChamado({ titulo, departamento_id, descricao }) {
   const res = await fetch('/api/chamados', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ titulo, departamento, descricao })
+    body: JSON.stringify({ titulo, departamento_id, descricao })
   });
   if (!res.ok) throw new Error('Falha ao abrir chamado');
   return await res.json();
