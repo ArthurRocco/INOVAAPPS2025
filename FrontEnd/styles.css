@@ -1,9 +1,9 @@
 /* ====== Base (inspirado no visual clean da Apple) ====== */
 :root {
   /* Paleta */
-  --brand: rgb(111, 66, 193);
-  --bot: rgb(255, 169, 77);         /* bolha do bot (laranja) */
-  --user: rgb(214, 194, 255);        /* bolha do usuário */
+  --brand: rgb(144, 25, 235);
+  --bot: rgb(240, 178, 111);         /* bolha do bot (laranja) */
+  --user: rgb(202, 204, 237);        /* bolha do usuário */
 
   --bg: rgb(248, 249, 251);          /* fundo app */
   --card: rgb(255, 255, 255);        /* fundo cards */
@@ -16,10 +16,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: rgb(16, 16, 18);
-    --card: rgb(28, 28, 30);
+    --bg: rgb(231, 231, 241);
+    --card: rgb(36, 33, 36);
     --text: rgb(242, 242, 247);
-    --muted: rgb(142, 142, 147);
+    --muted: rgb(128, 128, 156);
     --divider: rgba(255,255,255,0.08);
     --shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
