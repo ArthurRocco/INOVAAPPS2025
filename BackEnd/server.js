@@ -12,13 +12,26 @@ const db = new sqlite3.Database('./suporte.db', (err) => {
 });
 
 // Cria tabela se não existir
-db.run(`CREATE TABLE IF NOT EXISTS chamados (
+db.serialize(() => {
+  // Cria tabela de Departamentos se não existir
+  db.run(`CREATE TABLE IF NOT EXISTS departamentos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE
+  );`);
+
+  // Cria tabela de Chamados se não existir
+  db.run(`CREATE TABLE IF NOT EXISTS chamados (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo TEXT NOT NULL,
-    departamento TEXT,
+    departamento_id INTEGER NOT NULL,
     descricao TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'aberto'
-);`);
+    status TEXT NOT NULL DEFAULT 'aberto',
+    FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
+  );`);
+});
+
+
+
 
 dotenv.config();
 
