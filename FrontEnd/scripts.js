@@ -86,7 +86,7 @@ async function loadSystemInstruction() {
     if (!res.ok) throw new Error('Não foi possível carregar o arquivo systemInstruction.txt');
     systemInstruction += await res.text();
     console.log('systemInstruction carregado com sucesso');
-    systemInstruction += " Se o usuário perguntar algo **fora desses tópicos** ou quiser ABRIR UM CHAMADO, responda: Não tenho uma solução pronta, mas vou criar um chamado para suporte técnico."
+    systemInstruction += " Se o usuário não relatar nenhum problema, converse normalmente. Se o usuário perguntar algo **fora desses tópicos** ou quiser ABRIR UM CHAMADO, responda **APENAS**: Não tenho uma solução pronta, mas vou criar um chamado para suporte técnico."
   } catch (err) {
     console.error(err);
     systemInstruction = 'Erro: não foi possível carregar instruções.';
