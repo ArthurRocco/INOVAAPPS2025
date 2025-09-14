@@ -29,6 +29,10 @@ Navegue até a pasta `BackEnd` e instale as dependências necessárias. Você po
 cd BackEnd
 
 # Dependências principais
+npm i
+```
+ou
+```bash
 npm install express
 npm install cors
 npm install dotenv
