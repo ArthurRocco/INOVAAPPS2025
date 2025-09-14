@@ -53,29 +53,6 @@
         <div id="typing" class="typing text-muted small mt-2">Assistente está digitando…</div>
       </div>
     </div>
-    <div class="text-center my-3">
-      <button id="testTicketBtn" class="btn btn-outline-primary">Gerar Chamado de Teste</button>
-    </div>
-    <script>
-      document.getElementById('testTicketBtn').addEventListener('click', () => {
-        // Função auxiliar para salvar ticket
-        function ticketsLoad(){ try { return JSON.parse(localStorage.getItem('tickets')||'[]'); } catch { return []; } }
-        function ticketsSave(list){ localStorage.setItem('tickets', JSON.stringify(list||[])); }
-        function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
-
-        const list = ticketsLoad();
-        const ticket = {
-          id: Date.now(),
-          name: 'Teste',
-          title: 'Chamado de Teste',
-          description: 'Este é um chamado gerado manualmente pelo botão de teste.',
-          createdAt: new Date().toISOString()
-        };
-        list.unshift(ticket);
-        ticketsSave(list);
-        window.location.href = './chamados.html';
-      });
-    </script>
   </main>
 
   <!-- Modal Configurações -->

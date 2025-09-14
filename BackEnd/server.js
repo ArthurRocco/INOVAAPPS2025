@@ -107,11 +107,19 @@ app.post('/api/chamados', (req, res) => {
 
 // Listar chamados
 app.get('/api/chamados', (req, res) => {
-  db.all('SELECT * FROM chamados ORDER BY id DESC', [], (err, rows) => {
+  const query = `
+    SELECT c.id, c.titulo, c.descricao, c.status, c.departamento_id, d.nome AS departamento
+    FROM chamados c
+    LEFT JOIN departamentos d ON c.departamento_id = d.id
+    ORDER BY c.id DESC
+  `;
+  db.all(query, [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(rows);
   });
 });
+
+
 
 
 // Atualizar status de um chamado
@@ -150,4 +158,14 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Backend rodando em http://localhost:${PORT}`);
   console.log(`Servindo frontend de ${FRONTEND_DIR}`);
+});
+
+// Remover chamado
+app.delete('/api/chamados/:id', (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM chamados WHERE id = ?', [id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: 'Chamado não encontrado' });
+    res.json({ id });
+  });
 });

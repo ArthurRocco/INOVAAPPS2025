@@ -31,6 +31,8 @@ header .btn-outline-light:focus {
   border: none;
   border-radius: var(--radius);
   transition: transform .15s ease, box-shadow .15s ease;
+  background-color: rgb(238, 238, 255);
+  border-radius: 5px;
 }
 
 #ticketsGrid .card:hover {

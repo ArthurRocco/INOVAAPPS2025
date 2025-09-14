@@ -161,47 +161,6 @@ async function abrirChamado({ titulo, departamento_id, descricao }) {
   return await res.json();
 }
 
-
-
-document.getElementById('createTicket').addEventListener('click', async () => {
-  const titulo = document.getElementById('ticketTitle').value.trim();
-  const descricao = document.getElementById('ticketDescription').value.trim();
-  const deptCheckbox = document.querySelector('#newTicketModal input[type=checkbox]:checked');
-
-  if (!titulo || !descricao || !deptCheckbox) {
-    alert('Preencha título, descrição e selecione um departamento.');
-    return;
-  }
-
-  const departamento_id = 1; // Aqui você pode mapear pelo nome do departamento no backend
-
-  try {
-    const res = await fetch('/api/chamados', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ titulo, descricao, departamento_id })
-    });
-    if (!res.ok) throw new Error('Falha ao criar chamado');
-    const chamado = await res.json();
-
-    alert(`✅ Chamado criado com ID ${chamado.id}`);
-
-    // Fecha o modal
-    const modalEl = document.getElementById('newTicketModal');
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    modal.hide();
-
-    // Limpa campos
-    document.getElementById('ticketTitle').value = '';
-    document.getElementById('ticketDescription').value = '';
-    deptCheckbox.checked = false;
-
-  } catch (err) {
-    console.error(err);
-    alert('Erro ao criar chamado: ' + err.message);
-  }
-});
-
 // ===== Garantir escolha única no modal Novo Chamado =====
 const deptCheckboxes = document.querySelectorAll('#newTicketModal input[type=checkbox]');
 deptCheckboxes.forEach(cb => {
@@ -218,4 +177,62 @@ deptCheckboxes.forEach(cb => {
 document.getElementById('sendBtn').addEventListener('click', handleSend);
 document.getElementById('chatInput').addEventListener('keydown', (e)=>{
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+});
+
+document.getElementById('createTicket').addEventListener('click', async () => {
+  const titulo = document.getElementById('ticketTitle').value.trim();
+  const descricao = document.getElementById('ticketDescription').value.trim();
+
+  // pega os checkboxes marcados
+  const deptCheckboxes = Array.from(document.querySelectorAll('#newTicketModal .form-check-input'));
+  const checkedDept = deptCheckboxes.find(c => c.checked);
+
+  if (!titulo || !descricao || !checkedDept) {
+    alert('Preencha título, descrição e selecione um departamento!');
+    return;
+  }
+
+  try {
+    // 1️⃣ busca os departamentos do backend
+    const resDeps = await fetch('/api/departamentos');
+    if (!resDeps.ok) throw new Error('Não foi possível carregar os departamentos');
+    const departamentos = await resDeps.json();
+
+    // 2️⃣ mapeia o nome para o id
+    const deptMap = {};
+    departamentos.forEach(d => { deptMap[d.nome] = d.id; });
+
+    const departamentoId = deptMap[checkedDept.value];
+    if (!departamentoId) throw new Error('Departamento inválido');
+
+    // 3️⃣ cria o chamado no backend
+    const res = await fetch('/api/chamados', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        titulo,
+        descricao,
+        departamento_id: departamentoId
+      })
+    });
+
+    if (!res.ok) throw new Error('Falha ao criar chamado');
+
+
+    // fecha modal e limpa campos
+    const modalEl = document.getElementById('newTicketModal');
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+
+    document.getElementById('ticketTitle').value = '';
+    document.getElementById('ticketDescription').value = '';
+    deptCheckboxes.forEach(c => c.checked = false);
+
+    // opcional: atualizar lista de chamados
+    window.location.href = './chamados.html';
+
+  } catch (err) {
+    alert('Erro: ' + err.message);
+    console.error(err);
+  }
 });

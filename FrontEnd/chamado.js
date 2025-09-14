@@ -55,11 +55,37 @@ async function loadTickets() {
           <p class="text-muted small mb-2">Status atual: <strong data-role="status-label">${txt}</strong></p>
           <div class="d-flex justify-content-between align-items-center mt-2">
             <small class="text-muted">${chamado.departamento || 'Geral'}</small>
-            <button class="btn btn-sm btn-outline-primary" data-action="toggle-status">Alterar status</button>
+            
           </div>
-        </div>
+          <div>
+          <button class="btn btn-sm btn-outline-primary" data-action="toggle-status">Alterar status</button>
+          <button class="btn btn-sm btn-outline-danger" data-action="remove">Remover</button>
+          </div>
+          </div>
       </div>
     `;
+    const removeBtn = div.querySelector('[data-action="remove"]');
+    removeBtn.addEventListener('click', async () => {
+      try {
+        const resp = await fetch(`${location.origin}/api/chamados/${chamado.id}`, {
+          method: 'DELETE'
+        });
+        if (!resp.ok) {
+          const msg = await resp.text();
+          throw new Error(msg || 'Erro ao remover chamado');
+        }
+        // Remove card da UI
+        div.remove();
+
+        // Atualiza grid vazia se não houver mais chamados
+        if (ticketsGrid.children.length === 0) ticketsEmpty.style.display = 'block';
+
+      } catch (err) {
+        console.error('[chamado:delete]', err);
+        alert('Não foi possível remover o chamado do servidor.');
+      }
+    });
+
     ticketsGrid.appendChild(div);
 
     const badge = div.querySelector('[data-role="status"]');
