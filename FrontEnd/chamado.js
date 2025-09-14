@@ -48,7 +48,10 @@ async function loadTickets() {
       <div class="card shadow-sm">
         <div class="card-body d-flex flex-column">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <h5 class="card-title mb-0">${chamado.titulo}</h5>
+            <div>
+              <h5 class="card-title mb-0">${chamado.titulo}</h5>
+              <small class="text-muted">ID: ${chamado.id}</small>
+            </div>
             <span class="badge status-badge ${cls}" data-role="status">${txt}</span>
           </div>
           <p class="card-text flex-grow-1">${chamado.descricao}</p>
